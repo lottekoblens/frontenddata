@@ -33,9 +33,9 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
 });
 
 function update(new_data) {
+  
   //update the scales
-
-  xscale.domain([0, d3.max(new_data.tracks.track.map(d => +d.listeners))])
+  xscale.domain([0, d3.max(new_data.tracks.track.map(d => +d.listeners))]) 
   yscale.domain(new_data.tracks.track.map((d) => d.artist.name));
 
   //render the axis
