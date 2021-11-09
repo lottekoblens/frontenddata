@@ -1,0 +1,18 @@
+rect {
+    fill: lightblue;
+}
+
+
+circle {
+    stroke: black;
+    stroke-width: 4;
+    fill: red;
+    animation-name: animation;
+    animation-duration: 3s;
+}
+
+@keyframes animation {
+    from {fill: red;}
+    to {fill: white;}
+}
+

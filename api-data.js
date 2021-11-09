@@ -1,7 +1,7 @@
 const getData = () => {
     // using fetch to get data from API
     // the fetch returns a promise, which consists of an object of the response
-    fetch("http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json")
+    fetch("http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=300&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json")
         .then(response => response.json())
         .then(data => {
             // pass data to the functions
