@@ -33,9 +33,13 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
 });
 
 function update(new_data) {
-  
+
+  new_data.tracks.track.sort(function (a,b){
+    return b.listeners - a.listeners;
+  })
   //update the scales
   xscale.domain([0, d3.max(new_data.tracks.track.map(d => +d.listeners))]) 
+  // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(new_data.tracks.track.map((d) => d.artist.name));
 
   //render the axis
@@ -73,18 +77,18 @@ function update(new_data) {
 }
 
 //interactivity
-d3.select('#filter-us-only').on('change', function() {
-  // This will be triggered when the user selects or unselects the checkbox
-  const checked = d3.select(this).property('checked');
-  if (checked === true) {
-    // Checkbox was just checked
+// d3.select('#filter-us-only').on('change', function() {
+//   // This will be triggered when the user selects or unselects the checkbox
+//   const checked = d3.select(this).property('checked');
+//   if (checked === true) {
+//     // Checkbox was just checked
 
-    // Keep only data element whose country is US
-    const filtered_data = data.tracks.track.filter((d) => d.artist.name === 'Adele');
+//     // Keep only data element whose country is US
+//     const filtered_data = data.tracks.track.filter((d) => d.artist.name === 'Adele');
 
-    update(filtered_data);  // Update the chart with the filtered data
-  } else {
-    // Checkbox was just unchecked
-    update(data);  // Update the chart with all the data we have
-  }
-});
+//     update(filtered_data);  // Update the chart with the filtered data
+//   } else {
+//     // Checkbox was just unchecked
+//     update(data);  // Update the chart with all the data we have
+//   }
+// });
