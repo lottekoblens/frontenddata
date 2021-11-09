@@ -39,7 +39,7 @@ If you want to use this code you have to clone the repository by putting this in
 
 ### :page_facing_up: Rubric
 
-![Rubric]()
+![Rubric](./rubric.png)
 
 ## :mag_right: Resources
 
