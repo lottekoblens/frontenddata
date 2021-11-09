@@ -1,13 +1,11 @@
 const margin = {top: 40, bottom: 10, left: 120, right: 20};
-const width = 800 - margin.left - margin.right;
+const width = 1100 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
 // Creates sources <svg> element
 const svg = d3.select('body').append('svg')
 .attr('width', width+margin.left+margin.right)
 .attr('height', height+margin.top+margin.bottom);
-
-console.log(svg)
 
 // Group used to enforce margin
 const g = svg.append('g')
@@ -35,10 +33,11 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
 });
 
 function update(new_data) {
-
   //update the scales
-  xscale.domain([0, d3.max(new_data.tracks.track, (d) => d.listeners)]);
+
+  xscale.domain([0, d3.max(new_data.tracks.track.map(d => +d.listeners))])
   yscale.domain(new_data.tracks.track.map((d) => d.artist.name));
+
   //render the axis
   g_xaxis.transition().call(xaxis);
   g_yaxis.transition().call(yaxis);
@@ -81,7 +80,7 @@ d3.select('#filter-us-only').on('change', function() {
     // Checkbox was just checked
 
     // Keep only data element whose country is US
-    const filtered_data = data.filter((d) => d.tracks.track.artist.name === 'The Doors');
+    const filtered_data = data.tracks.track.filter((d) => d.artist.name === 'Adele');
 
     update(filtered_data);  // Update the chart with the filtered data
   } else {
