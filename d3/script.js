@@ -1,4 +1,4 @@
-const margin = {top: 40, bottom: 10, left: 120, right: 20};
+const margin = {top: 40, bottom: 10, left: 200, right: 20};
 const width = 1100 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
@@ -10,9 +10,6 @@ const svg = d3.select('body').append('svg')
 // Group used to enforce margin
 const g = svg.append('g')
 .attr('transform', `translate(${margin.left},${margin.top})`);
-
-// Global variable for all data
-let data;
 
 // Scales setup
 const xscale = d3.scaleLinear().range([0, width]);
@@ -27,20 +24,20 @@ const g_yaxis = g.append('g').attr('class','y axis');
 /////////////////////////
 
 d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=20&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json').then((json) => {
-  data = json;
+  data = json.tracks.track;
   console.log(data)
   update(data);
 });
 
-function update(new_data) {
+function update() {
 
-  new_data.tracks.track.sort(function (a,b){
+  data.sort(function (a,b){
     return b.listeners - a.listeners;
   })
   //update the scales
-  xscale.domain([0, d3.max(new_data.tracks.track.map(d => +d.listeners))]) 
+  xscale.domain([0, d3.max(data.map(d => +d.listeners))]) 
   // with + you return the values of listeners, so it can be used in the map()
-  yscale.domain(new_data.tracks.track.map((d) => d.artist.name));
+  yscale.domain(data.map((d) => d.name));
 
   //render the axis
   g_xaxis.transition().call(xaxis);
@@ -50,7 +47,7 @@ function update(new_data) {
   // Render the chart with new data
 
   // DATA JOIN use the key argument for ensurign that the same DOM element is bound to the same data-item
-  const rect = g.selectAll('rect').data(new_data.tracks.track, (d) => d.artist.name).join(
+  const rect = g.selectAll('rect').data(data, (d) => d.name).join(
     // ENTER 
     // new elements
     (enter) => {
@@ -71,24 +68,27 @@ function update(new_data) {
   rect.transition()
     .attr('height', yscale.bandwidth())
     .attr('width', (d) => xscale(d.listeners))
-    .attr('y', (d) => yscale(d.artist.name));
+    .attr('y', (d) => yscale(d.name));
 
-  rect.select('title').text((d) => d.artist.name);
+  rect.select('title').text((d) => d.name);
 }
 
 //interactivity
-// d3.select('#filter-us-only').on('change', function() {
-//   // This will be triggered when the user selects or unselects the checkbox
-//   const checked = d3.select(this).property('checked');
-//   if (checked === true) {
-//     // Checkbox was just checked
+d3.select('#filter-us-only').on('change', function() {
+  // This will be triggered when the user selects or unselects the checkbox
+  const checked = d3.select(this).property('checked');
+  if (checked === true) {
+    // const filtered_data = data.filter((d) => d.name === 'Creep');
+    xscale.domain([0, d3.max(data.map(d => +d.duration))]) 
+    yscale.domain(data.map((d) => d.name));
+    console.log('if werkt')
+    // update(filtered_data);
+  } else {
+    xscale.domain([0, d3.max(data.map(d => +d.listeners))]) 
+    // with + you return the values of listeners, so it can be used in the map()
+    yscale.domain(data.map((d) => d.name));
+    console.log('else werkt')
+    // update(data);
+  }
 
-//     // Keep only data element whose country is US
-//     const filtered_data = data.tracks.track.filter((d) => d.artist.name === 'Adele');
-
-//     update(filtered_data);  // Update the chart with the filtered data
-//   } else {
-//     // Checkbox was just unchecked
-//     update(data);  // Update the chart with all the data we have
-//   }
-// });
+});
