@@ -109,7 +109,7 @@ const update = filteredData => {
     },
     // UPDATE
     // update existing elements
-    (update) => update, console.log(filteredData),
+    (update) => update,
     // EXIT
     // elements that aren't associated with data
     (exit) => exit.remove()
