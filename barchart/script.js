@@ -1,15 +1,15 @@
-const margin = {top: 40, bottom: 10, left: 200, right: 20};
+const margin = { top: 40, bottom: 10, left: 200, right: 20 };
 const width = 1100 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
 // Creates sources <svg> element
 const svg = d3.select('body').append('svg')
-.attr('width', width+margin.left+margin.right)
-.attr('height', height+margin.top+margin.bottom);
+  .attr('width', width + margin.left + margin.right)
+  .attr('height', height + margin.top + margin.bottom);
 
 // Group used to enforce margin
 const g = svg.append('g')
-.attr('transform', `translate(${margin.left},${margin.top})`);
+  .attr('transform', `translate(${margin.left},${margin.top})`);
 
 // Scales setup
 const xscale = d3.scaleLinear().range([0, width]);
@@ -17,54 +17,54 @@ const yscale = d3.scaleBand().rangeRound([0, height]).paddingInner(0.1);
 
 // Axis setup
 const xaxis = d3.axisTop().scale(xscale);
-const g_xaxis = g.append('g').attr('class','x axis');
+const g_xaxis = g.append('g').attr('class', 'x axis');
 const yaxis = d3.axisLeft().scale(yscale);
-const g_yaxis = g.append('g').attr('class','y axis');
+const g_yaxis = g.append('g').attr('class', 'y axis');
 
 /////////////////////////
 
 d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=20&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json')
-.then((json) => {
-  data = json.tracks.track;
-  // console.log(data)
-  deleteUnusedData(data);
-          changeKey(data);
-          stringToInteger(data);
-          sortDuration(data);
-          return data
-}).then(cleanedData => {
-  let filteredData = filterDurationZero(cleanedData);
-  console.table(filteredData);
-  update(filteredData);
-}).catch(err => {
-  // if something goes wrong, the error is displayed in the console
-  console.error(err);
-})
+  .then((json) => {
+    data = json.tracks.track;
+    // console.log(data)
+    deleteUnusedData(data);
+    changeKey(data);
+    stringToInteger(data);
+    sortDuration(data);
+    return data
+  }).then(cleanedData => {
+    let filteredData = filterDurationZero(cleanedData);
+    console.table(filteredData);
+    update(filteredData);
+  }).catch(err => {
+    // if something goes wrong, the error is displayed in the console
+    console.error(err);
+  })
 
 const deleteUnusedData = data => {
   // use forEach to loop over array track. Then I delete the properties that I don't need
   data.forEach(track => {
-      delete track.image;
-      delete track.mbid;
-      delete track.streamable;
+    delete track.image;
+    delete track.mbid;
+    delete track.streamable;
   });
 }
 
 const changeKey = data => {
   // using a forEach to change the key from 'name' in the array track to 'nameSong'
   data.forEach(track => {
-      Object.defineProperty(track, 'nameSong', Object.getOwnPropertyDescriptor(track, 'name'));
-      // with the Object.defineProperty() method you can define a 
-      // new property on an object or you can change an existing property on an object
-      delete track.name;
+    Object.defineProperty(track, 'nameSong', Object.getOwnPropertyDescriptor(track, 'name'));
+    // with the Object.defineProperty() method you can define a 
+    // new property on an object or you can change an existing property on an object
+    delete track.name;
   })
 }
 
 const stringToInteger = data => {
   data.forEach(track => {
-      // convert string to Integer for listeners and duration
-      track.listeners = parseInt(track.listeners);
-      track.duration = parseInt(track.duration);
+    // convert string to Integer for listeners and duration
+    track.listeners = parseInt(track.listeners);
+    track.duration = parseInt(track.duration);
   })
 }
 
@@ -77,17 +77,17 @@ const sortDuration = data => {
 const filterDurationZero = data => {
   // remove objects whose duration equals to 0
   return data.filter(track => {
-         return track.duration > 0;
-      })
+    return track.duration > 0;
+  })
 }
 
 const update = filteredData => {
 
-  filteredData.sort(function (a,b){
+  filteredData.sort(function (a, b) {
     return b.listeners - a.listeners;
   })
   //update the scales
-  xscale.domain([0, d3.max(filteredData.map(d => +d.listeners))]) 
+  xscale.domain([0, d3.max(filteredData.map(d => +d.listeners))])
   // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(filteredData.map((d) => d.nameSong));
 
@@ -117,10 +117,14 @@ const update = filteredData => {
 
   // ENTER + UPDATE
   // both old and new elements
-  rect.transition()
+  rect
     .attr('height', yscale.bandwidth())
-    .attr('width', (d) => xscale(d.listeners))
-    .attr('y', (d) => yscale(d.nameSong));
+    .attr('y', (d) => yscale(d.nameSong))
+    .transition()
+    .duration(750)
+    .delay((d, i) => { return i * 150; })
+    .attr('width', (d) => xscale(d.listeners));
+
 
   rect.select('title').text((d) => d.nameSong);
 }
