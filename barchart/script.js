@@ -33,7 +33,7 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
     sortDuration(data);
     return data
   }).then(cleanedData => {
-    let filteredData = filterDurationZero(cleanedData);
+    filteredData = filterDurationZero(cleanedData);
     console.table(filteredData);
     update(filteredData);
   }).catch(err => {
@@ -92,8 +92,8 @@ const update = filteredData => {
   yscale.domain(filteredData.map((d) => d.nameSong));
 
   //render the axis
-  g_xaxis.transition().call(xaxis);
-  g_yaxis.transition().call(yaxis);
+  g_xaxis.transition().duration(800).call(xaxis);
+  g_yaxis.transition().duration(800).call(yaxis);
 
 
   // Render the chart with new data
@@ -120,31 +120,76 @@ const update = filteredData => {
   rect
     .attr('height', yscale.bandwidth())
     .attr('y', (d) => yscale(d.nameSong))
+    // transition for bar chart
     .transition()
-    .duration(750)
-    .delay((d, i) => { return i * 150; })
+    .duration(800)
+    // added delay so that every bar comes after the one above
     .attr('width', (d) => xscale(d.listeners));
 
+  rect.select('title').text((d) => d.nameSong);
+}
+
+
+const getDuration = data => {
+  xscale.domain([0, d3.max(data.map(d => +d.duration))])
+  // with + you return the values of listeners, so it can be used in the map()
+  yscale.domain(data.map((d) => d.nameSong));
+
+  //render the axis
+  g_xaxis.transition().duration(800).call(xaxis);
+  g_yaxis.transition().duration(800).call(yaxis);
+
+
+  // Render the chart with new data
+
+  // DATA JOIN use the key argument for ensurign that the same DOM element is bound to the same data-item
+  const rect = g.selectAll('rect').data(data, (d) => d.nameSong).join(
+    // ENTER 
+    // new elements
+    (enter) => {
+      const rect_enter = enter.append('rect').attr('x', 0);
+      rect_enter.append('title');
+      return rect_enter;
+    },
+    // UPDATE
+    // update existing elements
+    (update) => update,
+    // EXIT
+    // elements that aren't associated with data
+    (exit) => exit.remove()
+  );
+
+  // ENTER + UPDATE
+  // both old and new elements
+  rect
+    .attr('height', yscale.bandwidth())
+    .attr('y', (d) => yscale(d.nameSong))
+    // transition for bar chart
+    .transition()
+    .duration(800)
+    // added delay so that every bar comes after the one above
+    .attr('width', (d) => xscale(d.duration));
 
   rect.select('title').text((d) => d.nameSong);
 }
 
 //interactivity
-// d3.select('#filter-us-only').on('change', function() {
-//   // This will be triggered when the user selects or unselects the checkbox
-//   const checked = d3.select(this).property('checked');
-//   if (checked === true) {
-//     const filtered_data = filteredData.filter((d) => d.name === 'Creep');
-//     // xscale.domain([0, d3.max(data.map(d => +d.duration))]) 
-//     // yscale.domain(data.map((d) => d.name));
-//     // console.log('if werkt')
-//     update(filtered_data);
-//   } else {
-//     // xscale.domain([0, d3.max(data.map(d => +d.listeners))]) 
-//     // // with + you return the values of listeners, so it can be used in the map()
-//     // yscale.domain(data.map((d) => d.name));
-//     // console.log('else werkt')
-//     update(filteredData);
-//   }
+d3.select('#duration').on('change', function () {
+  // This will be triggered when the user selects or unselects the checkbox
+  const checked = d3.select(this).property('checked');
+  if (checked === true) {
+    getDuration(filteredData)
+  } else {
+    update(filteredData)
+  }
+});
 
-// });
+d3.select('#listeners').on('change', function () {
+  // This will be triggered when the user selects or unselects the checkbox
+  const checked = d3.select(this).property('checked');
+  if (checked === true) {
+    update(filteredData)
+  } else {
+    update(filteredData)
+  }
+});

@@ -1,4 +1,6 @@
 body {
+    background-color: black;
+    color: white;
     width: 800px;
     margin-left: 8em;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
