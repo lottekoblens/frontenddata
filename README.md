@@ -47,4 +47,4 @@ If you want to use this code you have to clone the repository by putting this in
 
 ## :page_with_curl: License
 
-Author: Lotte Koblens, license by [MIT](https://github.com/lottekoblens/functionalprogramming/blob/master/LICENSE)
+Author: Lotte Koblens, license by [MIT](https://github.com/lottekoblens/frontenddata/blob/master/LICENSE)
