@@ -70,7 +70,6 @@ const stringToInteger = data => {
 
 const sortDuration = data => {
   // using sort to display object from highest duration to lowest duration
-  // Sam Boot helped me with this code, he explained to me how it works and how I could use it
   data.sort((low, high) => high.duration - low.duration);
 }
 
@@ -82,10 +81,10 @@ const filterDurationZero = data => {
 }
 
 const update = filteredData => {
-
   filteredData.sort(function (a, b) {
     return b.listeners - a.listeners;
   })
+
   //update the scales
   xscale.domain([0, d3.max(filteredData.map(d => +d.listeners))])
   // with + you return the values of listeners, so it can be used in the map()
@@ -107,14 +106,12 @@ const update = filteredData => {
       rect_enter.append('title');
       return rect_enter;
     },
-    // UPDATE
-    // update existing elements
+    // update
     (update) => update,
     // EXIT
     // elements that aren't associated with data
     (exit) => exit.remove()
   );
-
   // ENTER + UPDATE
   // both old and new elements
   rect
@@ -123,14 +120,15 @@ const update = filteredData => {
     // transition for bar chart
     .transition()
     .duration(800)
-    // added delay so that every bar comes after the one above
     .attr('width', (d) => xscale(d.listeners));
-
   rect.select('title').text((d) => d.nameSong);
 }
 
-
 const getDuration = data => {
+  filteredData.sort(function (a, b) {
+    return b.duration - a.duration;
+  })
+
   xscale.domain([0, d3.max(data.map(d => +d.duration))])
   // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(data.map((d) => d.nameSong));
@@ -167,28 +165,21 @@ const getDuration = data => {
     // transition for bar chart
     .transition()
     .duration(800)
-    // added delay so that every bar comes after the one above
     .attr('width', (d) => xscale(d.duration));
-
   rect.select('title').text((d) => d.nameSong);
 }
 
-//interactivity
-d3.select('#duration').on('change', function () {
+// filter 
+d3.selectAll('#filter').on('change', function () {
   // This will be triggered when the user selects or unselects the checkbox
   const checked = d3.select(this).property('checked');
   if (checked === true) {
+    if(d3.select(this).node().value === 'duration') {
     getDuration(filteredData)
-  } else {
-    update(filteredData)
-  }
-});
-
-d3.select('#listeners').on('change', function () {
-  // This will be triggered when the user selects or unselects the checkbox
-  const checked = d3.select(this).property('checked');
-  if (checked === true) {
-    update(filteredData)
+    }
+    if (d3.select(this).node().value === 'listeners') {
+      update(filteredData)
+    }
   } else {
     update(filteredData)
   }
