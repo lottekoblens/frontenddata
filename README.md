@@ -36,7 +36,7 @@ The data I use, is fetched from the API Last.fm. I fetch the top numbers of The 
 
 ## :clipboard: Assignment
 
-
+Create a data visualisation (using the d3 library) based on given data where data can be explored through interaction using enter(), update(), and exit().
 
 ### :page_facing_up: Rubric
 
