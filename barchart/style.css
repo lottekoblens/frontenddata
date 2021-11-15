@@ -4,14 +4,54 @@ body {
     width: 800px;
     margin-left: 8em;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  }
-  rect {
+}
+  
+rect {
     fill: rgb(121, 176, 150);
     fill-opacity: 0.8;
-  }
-  rect:hover {
+}
+  
+rect:hover {
     fill-opacity: 1;
-  }
-  .axis {
+}
+
+.axis {
     font-size: smaller;
-  }
+}
+
+.highlight {
+  fill: white;
+}
+
+
+#tooltip {
+	position: absolute;
+	width: 200px;
+	height: auto;
+	padding: 10px;
+	background-color: blanchedalmond;
+	-webkit-border-raadius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+#tooltip.hidden {
+	display: none;
+}
+
+#tooltip p {
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 20px;
+	color: black;
+}
+
+.highlight {
+	fill: palevioletred;
+	opacity: 0.7;
+}

@@ -2,20 +2,20 @@ const margin = { top: 40, bottom: 10, left: 200, right: 20 };
 const width = 1100 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
-// Creates sources <svg> element
+// create sources svg element
 const svg = d3.select('body').append('svg')
   .attr('width', width + margin.left + margin.right)
   .attr('height', height + margin.top + margin.bottom);
 
-// Group used to enforce margin
+// group used to enforce margin
 const g = svg.append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`);
 
-// Scales setup
+// scales
 const xscale = d3.scaleLinear().range([0, width]);
 const yscale = d3.scaleBand().rangeRound([0, height]).paddingInner(0.1);
 
-// Axis setup
+// axis
 const xaxis = d3.axisTop().scale(xscale);
 const g_xaxis = g.append('g').attr('class', 'x axis');
 const yaxis = d3.axisLeft().scale(yscale);
@@ -80,6 +80,7 @@ const filterDurationZero = data => {
   })
 }
 
+// function to show amount of listeners on xscale
 const update = filteredData => {
   filteredData.sort(function (a, b) {
     return b.listeners - a.listeners;
@@ -95,12 +96,9 @@ const update = filteredData => {
   g_yaxis.transition().duration(800).call(yaxis);
 
 
-  // Render the chart with new data
-
-  // DATA JOIN use the key argument for ensurign that the same DOM element is bound to the same data-item
+  // render the chart with new data
   const rect = g.selectAll('rect').data(filteredData, (d) => d.nameSong).join(
-    // ENTER 
-    // new elements
+    // entering new elements
     (enter) => {
       const rect_enter = enter.append('rect').attr('x', 0);
       rect_enter.append('title');
@@ -108,79 +106,95 @@ const update = filteredData => {
     },
     // update
     (update) => update,
-    // EXIT
-    // elements that aren't associated with data
+    // exit to delete the elements that have no data
     (exit) => exit.remove()
-  );
-  // ENTER + UPDATE
-  // both old and new elements
+  )
+  .on('mouseover', onMouseOver)
+  .on('mousemove', onMouseOver)
+  .on('mouseout', onMouseOut);
+
   rect
     .attr('height', yscale.bandwidth())
     .attr('y', (d) => yscale(d.nameSong))
-    // transition for bar chart
     .transition()
     .duration(800)
-    .attr('width', (d) => xscale(d.listeners));
+    .attr('width', (d) => xscale(d.listeners))
+
   rect.select('title').text((d) => d.nameSong);
+
 }
 
+
+// function to show duration of a song on xscale
 const getDuration = data => {
   filteredData.sort(function (a, b) {
     return b.duration - a.duration;
   })
 
   xscale.domain([0, d3.max(data.map(d => +d.duration))])
-  // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(data.map((d) => d.nameSong));
 
-  //render the axis
   g_xaxis.transition().duration(800).call(xaxis);
   g_yaxis.transition().duration(800).call(yaxis);
 
-
-  // Render the chart with new data
-
-  // DATA JOIN use the key argument for ensurign that the same DOM element is bound to the same data-item
   const rect = g.selectAll('rect').data(data, (d) => d.nameSong).join(
-    // ENTER 
-    // new elements
     (enter) => {
       const rect_enter = enter.append('rect').attr('x', 0);
       rect_enter.append('title');
       return rect_enter;
     },
-    // UPDATE
-    // update existing elements
     (update) => update,
-    // EXIT
-    // elements that aren't associated with data
     (exit) => exit.remove()
-  );
+  )  
+  .on('mouseover', onMouseOver)
+  .on('mousemove', onMouseOver)
+  .on('mouseout', onMouseOut);
 
-  // ENTER + UPDATE
-  // both old and new elements
   rect
     .attr('height', yscale.bandwidth())
     .attr('y', (d) => yscale(d.nameSong))
-    // transition for bar chart
     .transition()
     .duration(800)
-    .attr('width', (d) => xscale(d.duration));
-  rect.select('title').text((d) => d.nameSong);
+    .attr('width', (d) => xscale(d.duration))
+
+  rect.select('title').text((d) => d.nameSong)
 }
 
-// filter 
+function onMouseOver(d, data) {
+  // d is the data of the mouse
+  const xPosition = d.clientX
+  const yPosition = d.clientY
+
+  let toolTipValue
+    toolTipValue = data[selection]
+  d3.select(this).attr('class', 'highlight')
+  d3.select('#tooltip').classed('hidden', false)
+  d3.select('#tooltip')
+    .style('left', xPosition + 'px')
+    .style('top', yPosition + 'px')
+  d3.select('#value').text(toolTipValue)
+  d3.select('#name').text(data.nameSong)
+}
+
+function onMouseOut(d, i) {
+  d3.select(this).attr('class', 'bar')
+  d3.select('#tooltip').classed('hidden', true)
+}
+
+let selection = 'listeners'
 d3.selectAll('#filter').on('change', function () {
-  // This will be triggered when the user selects or unselects the checkbox
-  const checked = d3.select(this).property('checked');
-  if (checked === true) {
-    if(d3.select(this).node().value === 'duration') {
-    getDuration(filteredData)
-    }
-    if (d3.select(this).node().value === 'listeners') {
+	const checked = d3.select(this).property('checked')
+	if (checked === true) {
+		if (d3.select(this).node().value === 'listeners') {
+			selection = 'listeners'
       update(filteredData)
-    }
-  } else {
-    update(filteredData)
-  }
-});
+		}
+		if (d3.select(this).node().value === 'duration') {
+			selection = 'duration'
+      getDuration(filteredData)
+      console.log(filteredData)
+		}
+	} else {
+		update(filteredData)
+	}
+})

@@ -9,7 +9,11 @@
 </head>
 <body>
     <h1>Populairste nummers van Nederland</h1>
-<div>
+<div id='bar'>
+  <div class="hidden" id="tooltip">
+    <p id="name"></p>
+    <p><span id="value"> </span></p>
+  </div>
   <strong>Filter:</strong>
   <label><input type="radio" name="filter" value="listeners" id="filter" checked="checked" />Aantal listeners</label>
   <label><input type="radio" name="filter" value="duration" id="filter" />Duration nummers</label>
