@@ -28,7 +28,7 @@ If you want to use this code you have to clone the repository by putting this in
 
 ``` git clone https://github.com/lottekoblens/frontenddata ```
 
-Then go to the folder barchart.
+Then go to the folder barchart and you are ready to use the code.
 
 ## :file_folder:	 Data
 
