@@ -46,6 +46,7 @@ The data I use, is fetched from the API Last.fm. I fetch the top numbers of The 
 
 * Use issues better
 * Using switch statements instead of if,else-statements
+* Use modules for the functions
 
 ## :clipboard: Assignment
 
