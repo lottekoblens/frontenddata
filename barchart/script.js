@@ -143,10 +143,13 @@ const update = (filteredData, type) => {
     .duration(800)
     .attr('y', (d) => yscale(d.nameSong))
 
+  // when type is listeners the listeners will be displayed on the xscale
   if (type === 'listeners') {
     rect
       .attr('width', (d) => xscale(d.listeners))
-  } else {
+  } 
+  // otherwise the duration will be displayed on the xscale
+  else {
     rect
       .attr('width', (d) => xscale(d.duration))
   }
@@ -164,6 +167,7 @@ const onMouseOver = (d, data) => {
   toolTipValue = data[selection]
   // class is set to highlight
   d3.select(d.target).attr('class', 'highlight')
+  // class hidden is set to false, so the class is not used
   d3.select('#tooltip').classed('hidden', false)
   d3.select('#tooltip')
     .style('left', xPosition + 'px')
@@ -196,7 +200,6 @@ d3.selectAll('#filter').on('change', function () {
     if (d3.select(this).node().value === 'duration') {
       selection = 'duration'
       update(filteredData, 'duration')
-      console.log(filteredData)
     }
   } 
   // when there is no radiobutton being selected, the update function will be called with a type of duration
