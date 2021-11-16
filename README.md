@@ -16,7 +16,7 @@
 
 ![Concept](https://github.com/lottekoblens/frontenddata/blob/master/concept.gif)
 
-Display the data of the most popular songs in a bar chart. The bar chart has a filter, so the duration of a song can be displayed and the amount of listeners. This data will also be shown when the mouse hovers over a bar.
+Display the data of the most popular songs of The Netherlands in a bar chart. The bar chart has a filter, so the duration of a song can be displayed and the amount of listeners. This data will also be shown when the mouse hovers over a bar.
 
 ## :chart_with_upwards_trend: Proces
 
