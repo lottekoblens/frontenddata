@@ -10,7 +10,7 @@
 * [Assignment](https://github.com/lottekoblens/frontenddata/blob/master/README.md#clipboard-assignment)
   * [Rubric](https://github.com/lottekoblens/frontenddata/blob/master/README.md#page_facing_up-rubric)
 * [Resources](https://github.com/lottekoblens/frontenddata/blob/master/README.md#mag_right-resources)
-* [License](https://github.com/lottekoblens/frontenddata#license)
+* [License](https://github.com/lottekoblens/frontenddata/blob/master/README.md#page_with_curl-license)
 
 ## :bulb: Concept
 
