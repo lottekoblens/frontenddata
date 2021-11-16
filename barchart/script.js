@@ -1,3 +1,7 @@
+// for this code I used the tutorial of S. Gartzl https://www.sgratzl.com/d3tutorial/
+// I changed the code a lot after I followed the tutorial to make it work for my data and change a lot of other stuff
+// but I used it as an example 
+
 const margin = { top: 40, bottom: 10, left: 200, right: 20 };
 const width = 1100 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
@@ -26,7 +30,6 @@ const g_yaxis = g.append('g').attr('class', 'y axis');
 d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=20&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json')
   .then((json) => {
     data = json.tracks.track;
-    // console.log(data)
     deleteUnusedData(data);
     changeKey(data);
     stringToInteger(data);
@@ -34,7 +37,6 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
     return data
   }).then(cleanedData => {
     filteredData = filterDurationZero(cleanedData);
-    console.table(filteredData);
     update(filteredData);
   }).catch(err => {
     // if something goes wrong, the error is displayed in the console
@@ -94,9 +96,6 @@ const sortData = (filteredData, type) => {
 // function to show amount of listeners on xscale
 const update = (filteredData, type) => {
   sortData(filteredData, type);
-  
-  // save the in a veriable named theType, so it can be used 
-  let theType = type;
 
   //update the scales
   xscale.domain([0, d3.max(filteredData.map(d => {
@@ -137,6 +136,7 @@ const update = (filteredData, type) => {
     .on('mousemove', onMouseOver)
     .on('mouseout', onMouseOut);
 
+    // set the height and width of the rectangles and added a transition
   rect
     .attr('height', yscale.bandwidth())
     .transition()
@@ -158,13 +158,17 @@ const onMouseOver = (d, data) => {
   const xPosition = d.clientX
   const yPosition = d.clientY
 
+
   let toolTipValue
+  // set toolTipValue to the selection
   toolTipValue = data[selection]
+  // class is set to highlight
   d3.select(d.target).attr('class', 'highlight')
   d3.select('#tooltip').classed('hidden', false)
   d3.select('#tooltip')
     .style('left', xPosition + 'px')
     .style('top', yPosition + 'px')
+  // set text for tooltip 
   d3.select('#name').text('Het nummer ' + data.nameSong)
   if (selection === 'listeners') {
     d3.select('#value').text('heeft ' + toolTipValue + ' luisteraars.')
@@ -179,20 +183,24 @@ function onMouseOut() {
 }
 
 let selection = 'duration'
+// when radiobuttons are being checked this function will execute
 d3.selectAll('#filter').on('change', function () {
   const checked = d3.select(this).property('checked')
   if (checked === true) {
+    // when the radiobutton of listeners is selected, the update function will be called with a type of listeners
     if (d3.select(this).node().value === 'listeners') {
       selection = 'listeners'
       update(filteredData, 'listeners')
     }
+    // when the radiobutton of duration is selected, the update function will be called with a type of duration
     if (d3.select(this).node().value === 'duration') {
       selection = 'duration'
-      // getDuration(filteredData)
       update(filteredData, 'duration')
       console.log(filteredData)
     }
-  } else {
+  } 
+  // when there is no radiobutton being selected, the update function will be called with a type of duration
+  else {
     update(filteredData, 'duration')
   }
 })
