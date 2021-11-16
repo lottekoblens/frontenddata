@@ -44,7 +44,7 @@ Create a data visualisation (using the d3 library) based on given data where dat
 
 ## :mag_right: Resources
 
-*
+* Gratzl, S. (z.d.). D3 Tutorial. D3 Tutorial. Geraadpleegd op 9 november 2021, van https://www.sgratzl.com/d3tutorial/
 
 ## :page_with_curl: License
 
