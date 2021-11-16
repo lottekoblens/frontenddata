@@ -7,7 +7,7 @@
 * [Installation](https://github.com/lottekoblens/frontenddata/blob/master/README.md#wrench-installation)
 * [Data](https://github.com/lottekoblens/frontenddata/blob/master/README.md#file_folder-data)
 * [Wishlist](https://github.com/lottekoblens/frontenddata/blob/master/README.md#pencil-wishlist)
-* [Assignment](https://github.com/lottekoblens/frontenddata#assignment)
+* [Assignment](https://github.com/lottekoblens/frontenddata/blob/master/README.md#clipboard-assignment)
   * [Rubric](https://github.com/lottekoblens/frontenddata#rubric)
 * [Resources](https://github.com/lottekoblens/frontenddata#resources)
 * [License](https://github.com/lottekoblens/frontenddata#license)
