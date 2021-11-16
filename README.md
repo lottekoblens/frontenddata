@@ -2,7 +2,7 @@
 
 ## :bookmark_tabs:	 Table of Contents
 
-* [Concept](https://github.com/lottekoblens/frontenddata#concept)
+* [Concept](https://github.com/lottekoblens/frontenddata#bulb-concept)
 * [Proces](https://github.com/lottekoblens/frontenddata#proces)
 * [Installation](https://github.com/lottekoblens/frontenddata#installation)
 * [Data](https://github.com/lottekoblens/frontenddata#data)
