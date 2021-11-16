@@ -150,9 +150,6 @@ const update = (filteredData, type) => {
     rect
       .attr('width', (d) => xscale(d.duration))
   }
-
-  
-
 }
 
 const onMouseOver = (d, data) => {
