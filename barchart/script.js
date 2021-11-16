@@ -81,13 +81,26 @@ const filterDurationZero = data => {
 }
 
 // function to show amount of listeners on xscale
-const update = filteredData => {
+const update = (filteredData, type) => {
+  let hetType = type;
+
   filteredData.sort(function (a, b) {
-    return b.listeners - a.listeners;
+    if (type === 'listeners') {
+      return b.listeners - a.listeners
+    } else {
+      return b.duration - a.duration
+    }
   })
 
   //update the scales
-  xscale.domain([0, d3.max(filteredData.map(d => +d.listeners))])
+  xscale.domain([0, d3.max(filteredData.map(d => {
+    if (type === 'listeners') {
+      return +d.listeners;
+    } else {
+      return +d.duration;
+    }
+  }))])
+
   // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(filteredData.map((d) => d.nameSong));
 
@@ -109,70 +122,50 @@ const update = filteredData => {
     // exit to delete the elements that have no data
     (exit) => exit.remove()
   )
-  .on('mouseover', onMouseOver)
-  .on('mousemove', onMouseOver)
-  .on('mouseout', onMouseOut);
+    .on('mouseover', (d, data) => {
+      onMouseOver(d, data, 'listeners')
+    })
+    .on('mousemove', onMouseOver)
+    .on('mouseout', onMouseOut);
 
-  rect
+    rect
     .attr('height', yscale.bandwidth())
-    .attr('y', (d) => yscale(d.nameSong))
     .transition()
     .duration(800)
-    .attr('width', (d) => xscale(d.listeners))
+    .attr('y', (d) => yscale(d.nameSong))
 
-  rect.select('title').text((d) => d.nameSong);
+  if (type === 'listeners') {
+    rect
+      .attr('width', (d) => xscale(d.listeners))
+  } else {
+    rect
+      .attr('width', (d) => xscale(d.duration))
+  }
 
 }
 
-
-// function to show duration of a song on xscale
-const getDuration = data => {
-  filteredData.sort(function (a, b) {
-    return b.duration - a.duration;
-  })
-
-  xscale.domain([0, d3.max(data.map(d => +d.duration))])
-  yscale.domain(data.map((d) => d.nameSong));
-
-  g_xaxis.transition().duration(800).call(xaxis);
-  g_yaxis.transition().duration(800).call(yaxis);
-
-  const rect = g.selectAll('rect').data(data, (d) => d.nameSong).join(
-    (enter) => {
-      const rect_enter = enter.append('rect').attr('x', 0);
-      rect_enter.append('title');
-      return rect_enter;
-    },
-    (update) => update,
-    (exit) => exit.remove()
-  )  
-  .on('mouseover', onMouseOver)
-  .on('mousemove', onMouseOver)
-  .on('mouseout', onMouseOut);
-
-  rect
-    .attr('height', yscale.bandwidth())
-    .attr('y', (d) => yscale(d.nameSong))
-    .transition()
-    .duration(800)
-    .attr('width', (d) => xscale(d.duration))
-
-  rect.select('title').text((d) => d.nameSong)
-}
-
-function onMouseOver(d, data) {
+function onMouseOver(d, data, type) {
   // d is the data of the mouse
+  // clientX and clientY are the position of the mouse
   const xPosition = d.clientX
   const yPosition = d.clientY
 
+  console.log('onmouseover', type)
+
   let toolTipValue
-    toolTipValue = data[selection]
-  d3.select(this).attr('class', 'highlight')
+  toolTipValue = data[selection]
+  d3.select(d.target).attr('class', 'highlight')
   d3.select('#tooltip').classed('hidden', false)
   d3.select('#tooltip')
     .style('left', xPosition + 'px')
     .style('top', yPosition + 'px')
-  d3.select('#value').text(toolTipValue)
+  
+
+  if (selection === 'listeners') {
+    d3.select('#value').text('Aantal listeners:' + toolTipValue)
+  } else {
+    d3.select('#value').text('Duration van nummer:' + toolTipValue)
+  }
   d3.select('#name').text(data.nameSong)
 }
 
@@ -183,18 +176,19 @@ function onMouseOut(d, i) {
 
 let selection = 'listeners'
 d3.selectAll('#filter').on('change', function () {
-	const checked = d3.select(this).property('checked')
-	if (checked === true) {
-		if (d3.select(this).node().value === 'listeners') {
-			selection = 'listeners'
-      update(filteredData)
-		}
-		if (d3.select(this).node().value === 'duration') {
-			selection = 'duration'
-      getDuration(filteredData)
+  const checked = d3.select(this).property('checked')
+  if (checked === true) {
+    if (d3.select(this).node().value === 'listeners') {
+      selection = 'listeners'
+      update(filteredData, 'listeners')
+    }
+    if (d3.select(this).node().value === 'duration') {
+      selection = 'duration'
+      // getDuration(filteredData)
+      update(filteredData, 'duration')
       console.log(filteredData)
-		}
-	} else {
-		update(filteredData)
-	}
+    }
+  } else {
+    update(filteredData, 'duration')
+  }
 })
