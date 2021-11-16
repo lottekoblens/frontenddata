@@ -16,7 +16,14 @@
 
 ![Concept](https://github.com/lottekoblens/frontenddata/blob/master/concept.gif)
 
-Display the data of the most popular songs of The Netherlands in a bar chart. The bar chart has a filter, so the duration of a song can be displayed and the amount of listeners. This data will also be shown when the mouse hovers over a bar.
+I've been working on this project for two weeks. In those two weeks I had to make a visualization with D3. With D3 I displayed the data of the most popular songs of The Netherlands in a bar chart. The bar chart has a filter with two options:
+
+* Show the duration of the song
+* Show the amount of listeners of the song.
+
+On the y scale the name of the song will be displayed as you can see above. 
+
+I also added an hover. With this hover the data about the bar on which you hover will be displayed. This can also be seen above in the gif.
 
 ## :chart_with_upwards_trend: Proces
 
