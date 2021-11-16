@@ -16,6 +16,8 @@
 
 
 
+Display the data of the most popular songs in a bar chart. The bar chart has a filter, so the duration of a song can be displayed and the amount of listeners. This data will also be shown when the mouse hovers over a bar.
+
 ## :chart_with_upwards_trend: Proces
 
 If you want to know more about my proces. You can read my [Wiki](https://github.com/lottekoblens/frontenddata/wiki)!
@@ -36,6 +38,7 @@ The data I use, is fetched from the API Last.fm. I fetch the top numbers of The 
 ## :pencil: Wishlist
 
 * Use issues better
+* Using switch statements instead of if,else-statements
 
 ## :clipboard: Assignment
 
