@@ -80,10 +80,8 @@ const filterDurationZero = data => {
   })
 }
 
-// function to show amount of listeners on xscale
-const update = (filteredData, type) => {
-  let hetType = type;
-
+// function to sort the data from high to low
+const sortData = (filteredData, type) => {
   filteredData.sort(function (a, b) {
     if (type === 'listeners') {
       return b.listeners - a.listeners
@@ -91,9 +89,19 @@ const update = (filteredData, type) => {
       return b.duration - a.duration
     }
   })
+}
+
+// function to show amount of listeners on xscale
+const update = (filteredData, type) => {
+  sortData(filteredData, type);
+  
+  // save the in a veriable named theType, so it can be used 
+  let theType = type;
 
   //update the scales
   xscale.domain([0, d3.max(filteredData.map(d => {
+    // with the if else, the right data will be show on the xscale
+    // when type is listeners, the listeners will be show on the xscale
     if (type === 'listeners') {
       return +d.listeners;
     } else {
@@ -103,8 +111,10 @@ const update = (filteredData, type) => {
 
   // with + you return the values of listeners, so it can be used in the map()
   yscale.domain(filteredData.map((d) => d.nameSong));
+  // on the yscale the name of the song will be displayed
 
-  //render the axis
+  // render the axis
+  // when the axis are rendered there is a transition that takes 800 milliseconds
   g_xaxis.transition().duration(800).call(xaxis);
   g_yaxis.transition().duration(800).call(yaxis);
 
@@ -117,18 +127,17 @@ const update = (filteredData, type) => {
       rect_enter.append('title');
       return rect_enter;
     },
-    // update
+    // update the data
     (update) => update,
     // exit to delete the elements that have no data
     (exit) => exit.remove()
   )
-    .on('mouseover', (d, data) => {
-      onMouseOver(d, data, 'listeners')
-    })
+  // on mouseouver, mousemove, mouseout the function will be called
+    .on('mouseover', onMouseOver)
     .on('mousemove', onMouseOver)
     .on('mouseout', onMouseOut);
 
-    rect
+  rect
     .attr('height', yscale.bandwidth())
     .transition()
     .duration(800)
@@ -142,15 +151,15 @@ const update = (filteredData, type) => {
       .attr('width', (d) => xscale(d.duration))
   }
 
+  
+
 }
 
-function onMouseOver(d, data, type) {
+const onMouseOver = (d, data) => {
   // d is the data of the mouse
   // clientX and clientY are the position of the mouse
   const xPosition = d.clientX
   const yPosition = d.clientY
-
-  console.log('onmouseover', type)
 
   let toolTipValue
   toolTipValue = data[selection]
@@ -159,22 +168,20 @@ function onMouseOver(d, data, type) {
   d3.select('#tooltip')
     .style('left', xPosition + 'px')
     .style('top', yPosition + 'px')
-  
-
+  d3.select('#name').text('Het nummer ' + data.nameSong)
   if (selection === 'listeners') {
-    d3.select('#value').text('Aantal listeners:' + toolTipValue)
+    d3.select('#value').text('heeft ' + toolTipValue + ' luisteraars.')
   } else {
-    d3.select('#value').text('Duration van nummer:' + toolTipValue)
+    d3.select('#value').text('duurt: ' + toolTipValue + ' seconden.')
   }
-  d3.select('#name').text(data.nameSong)
 }
 
-function onMouseOut(d, i) {
+function onMouseOut() {
   d3.select(this).attr('class', 'bar')
   d3.select('#tooltip').classed('hidden', true)
 }
 
-let selection = 'listeners'
+let selection = 'duration'
 d3.selectAll('#filter').on('change', function () {
   const checked = d3.select(this).property('checked')
   if (checked === true) {
