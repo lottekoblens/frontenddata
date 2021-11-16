@@ -4,7 +4,7 @@
 
 * [Concept](https://github.com/lottekoblens/frontenddata#bulb-concept)
 * [Proces](https://github.com/lottekoblens/frontenddata#chart_with_upwards_trend-proces)
-* [Installation](https://github.com/lottekoblens/frontenddata#installation)
+* [Installation](https://github.com/lottekoblens/frontenddata/blob/master/README.md#wrench-installation)
 * [Data](https://github.com/lottekoblens/frontenddata#data)
 * [Wishlist](https://github.com/lottekoblens/frontenddata#wishlist)
 * [Assignment](https://github.com/lottekoblens/frontenddata#assignment)
