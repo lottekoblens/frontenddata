@@ -37,7 +37,7 @@ d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=nethe
     return data
   }).then(cleanedData => {
     filteredData = filterDurationZero(cleanedData);
-    update(filteredData);
+    updateXscale(filteredData);
   }).catch(err => {
     // if something goes wrong, the error is displayed in the console
     console.error(err);
@@ -94,7 +94,7 @@ const sortData = (filteredData, type) => {
 }
 
 // function to show amount of listeners on xscale
-const update = (filteredData, type) => {
+const updateXscale = (filteredData, type) => {
   sortData(filteredData, type);
 
   //update the scales
@@ -117,7 +117,10 @@ const update = (filteredData, type) => {
   g_xaxis.transition().duration(800).call(xaxis);
   g_yaxis.transition().duration(800).call(yaxis);
 
+  updateRect(filteredData, type)
+}
 
+const updateRect = (filteredData, type) => {
   // render the chart with new data
   const rect = g.selectAll('rect').data(filteredData, (d) => d.nameSong).join(
     // entering new elements
@@ -125,34 +128,30 @@ const update = (filteredData, type) => {
       const rect_enter = enter.append('rect').attr('x', 0);
       rect_enter.append('title');
       return rect_enter;
-    },
-    // update the data
-    (update) => update,
-    // exit to delete the elements that have no data
-    (exit) => exit.remove()
-  )
-  // on mouseouver, mousemove, mouseout the function will be called
-    .on('mouseover', onMouseOver)
-    .on('mousemove', onMouseOver)
-    .on('mouseout', onMouseOut);
+    }
+  ) // on mouseouver, mousemove, mouseout the function will be called
+  .on('mouseover', onMouseOver)
+  .on('mousemove', onMouseOver)
+  .on('mouseout', onMouseOut);
 
-    // set the height and width of the rectangles and added a transition
+  // set the height and width of the rectangles and added a transition
+rect
+  .attr('height', yscale.bandwidth())
+  .transition()
+  .duration(800)
+  .attr('y', (d) => yscale(d.nameSong))
+
+// when type is listeners the listeners will be displayed on the xscale
+if (type === 'listeners') {
   rect
-    .attr('height', yscale.bandwidth())
-    .transition()
-    .duration(800)
-    .attr('y', (d) => yscale(d.nameSong))
-
-  // when type is listeners the listeners will be displayed on the xscale
-  if (type === 'listeners') {
-    rect
-      .attr('width', (d) => xscale(d.listeners))
-  } 
-  // otherwise the duration will be displayed on the xscale
-  else {
-    rect
-      .attr('width', (d) => xscale(d.duration))
-  }
+    .attr('width', (d) => xscale(d.listeners))
+    
+} 
+// otherwise the duration will be displayed on the xscale
+else {
+  rect
+    .attr('width', (d) => xscale(d.duration))
+}
 }
 
 const onMouseOver = (d, data) => {
@@ -160,7 +159,6 @@ const onMouseOver = (d, data) => {
   // clientX and clientY are the position of the mouse
   const xPosition = d.clientX
   const yPosition = d.clientY
-
 
   let toolTipValue
   // set toolTipValue to the selection
@@ -181,8 +179,8 @@ const onMouseOver = (d, data) => {
   }
 }
 
-function onMouseOut() {
-  d3.select(this).attr('class', 'bar')
+const onMouseOut = (d) => {
+  d3.select(d.target).attr('class', 'bar')
   d3.select('#tooltip').classed('hidden', true)
 }
 
@@ -194,16 +192,16 @@ d3.selectAll('#filter').on('change', function () {
     // when the radiobutton of listeners is selected, the update function will be called with a type of listeners
     if (d3.select(this).node().value === 'listeners') {
       selection = 'listeners'
-      update(filteredData, 'listeners')
+      updateXscale(filteredData, 'listeners')
     }
     // when the radiobutton of duration is selected, the update function will be called with a type of duration
-    if (d3.select(this).node().value === 'duration') {
+    else if (d3.select(this).node().value === 'duration') {
       selection = 'duration'
-      update(filteredData, 'duration')
+      updateXscale(filteredData, 'duration')
     }
   } 
   // when there is no radiobutton being selected, the update function will be called with a type of duration
   else {
-    update(filteredData, 'duration')
+    updateXscale(filteredData, 'duration')
   }
 })
