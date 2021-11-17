@@ -27,7 +27,7 @@ const g_yaxis = g.append('g').attr('class', 'y axis');
 
 /////////////////////////
 
-d3.json('http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=20&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json')
+d3.json('https://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=netherlands&limit=20&api_key=f2ab12a57fcca396592451123c0c3ba1&format=json')
   .then((json) => {
     data = json.tracks.track;
     deleteUnusedData(data);
