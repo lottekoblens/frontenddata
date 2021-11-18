@@ -57,6 +57,11 @@ Create a data visualisation (using the d3 library) based on given data where dat
 ## :mag_right: Resources
 
 * Gratzl, S. (z.d.). D3 Tutorial. D3 Tutorial. Geraadpleegd op 9 november 2021, van https://www.sgratzl.com/d3tutorial/
+* W3 schools. (z.d.). SVG Tutorial. Geraadpleegd op 8 november 2021, van https://www.w3schools.com/graphics/svg_intro.asp
+* D3 in Depth. (2021, 12 mei). Scale functions. Geraadpleegd op 9 november 2021, van https://www.d3indepth.com/scales/
+* D3 in Depth. (2021a, mei 12). Enter, exit and update. Geraadpleegd op 9 november 2021, van https://www.d3indepth.com/enterexit/
+* D3 wiki. (z.d.). Transitions - D3 wiki. Geraadpleegd op 12 november 2021, van https://d3-wiki.readthedocs.io/zh_CN/master/Transitions/
+* tutorialspoint. (z.d.). D3.js - Data Join. Geraadpleegd op 10 november 2021, van https://www.tutorialspoint.com/d3js/d3js_data_join.htm
 
 ## :page_with_curl: License
 
