@@ -19,11 +19,6 @@ rect:hover {
     font-size: smaller;
 }
 
-.highlight {
-  fill: white;
-}
-
-
 #tooltip {
 	position: absolute;
 	width: 200px;

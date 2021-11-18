@@ -16,13 +16,14 @@ const g = svg.append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`);
 
 // scales
-const xscale = d3.scaleLinear().range([0, width]);
+const xscale = d3.scaleLinear().range([0, width]); // scaleLinear makes the steps between the values on the xscale equal
 const yscale = d3.scaleBand().rangeRound([0, height]).paddingInner(0.1);
+// paddingInner is for the space between the bars
 
 // axis
-const xaxis = d3.axisTop().scale(xscale);
+const xaxis = d3.axisTop().scale(xscale); // the xaxis will be displayed on the top
 const g_xaxis = g.append('g').attr('class', 'x axis');
-const yaxis = d3.axisLeft().scale(yscale);
+const yaxis = d3.axisLeft().scale(yscale); // the yaxis will be displayed on the left
 const g_yaxis = g.append('g').attr('class', 'y axis');
 
 /////////////////////////
@@ -42,6 +43,9 @@ d3.json('https://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=neth
     // if something goes wrong, the error is displayed in the console
     console.error(err);
   })
+
+
+// data cleaning
 
 const deleteUnusedData = data => {
   // use forEach to loop over array track. Then I delete the properties that I don't need
@@ -92,6 +96,9 @@ const sortData = (filteredData, type) => {
     }
   })
 }
+
+
+// making bar chart
 
 // function to show amount of listeners on xscale
 const updateXscale = (filteredData, type) => {
@@ -180,7 +187,9 @@ const onMouseOver = (d, data) => {
 }
 
 const onMouseOut = (d) => {
+  // with d.target the rect.bar class will be set to bar
   d3.select(d.target).attr('class', 'bar')
+  // the class hidden will be set to true
   d3.select('#tooltip').classed('hidden', true)
 }
 
@@ -192,11 +201,13 @@ d3.selectAll('#filter').on('change', function () {
     // when the radiobutton of listeners is selected, the update function will be called with a type of listeners
     if (d3.select(this).node().value === 'listeners') {
       selection = 'listeners'
+      // function updateXscale will be called with a type of listeners
       updateXscale(filteredData, 'listeners')
     }
     // when the radiobutton of duration is selected, the update function will be called with a type of duration
     else if (d3.select(this).node().value === 'duration') {
       selection = 'duration'
+      // function updateXscale will be called with a type of duration
       updateXscale(filteredData, 'duration')
     }
   } 
