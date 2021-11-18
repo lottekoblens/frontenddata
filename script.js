@@ -12,7 +12,7 @@ const svg = d3.select('body').append('svg') // body is selected and svg is added
   .attr('height', height + margin.top + margin.bottom)
 
 const g = svg.append('g') // group used to enforce margin
-  .attr('transform', `translate(${margin.left},${margin.top})`)
+  .attr('transform', `translate(${margin.left},${margin.top})`) // put svg on right place with the margin
 
 // scales
 const xscale = d3.scaleLinear().range([0, width]) // scaleLinear makes the steps between the values on the xscale equal
