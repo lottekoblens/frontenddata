@@ -62,6 +62,7 @@ Create a data visualisation (using the d3 library) based on given data where dat
 * D3 in Depth. (2021a, mei 12). Enter, exit and update. Geraadpleegd op 9 november 2021, van https://www.d3indepth.com/enterexit/
 * D3 wiki. (z.d.). Transitions - D3 wiki. Geraadpleegd op 12 november 2021, van https://d3-wiki.readthedocs.io/zh_CN/master/Transitions/
 * tutorialspoint. (z.d.). D3.js - Data Join. Geraadpleegd op 10 november 2021, van https://www.tutorialspoint.com/d3js/d3js_data_join.htm
+* Rathore, S. (2021). chart-examples/app.js at musical-branch · suwigyarathore/chart-examples. GitHub. Geraadpleegd op 12 november 2021, van https://github.com/suwigyarathore/chart-examples/blob/musical-branch/music/app.js
 
 ## :page_with_curl: License
 
